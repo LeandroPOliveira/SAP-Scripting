@@ -1,13 +1,32 @@
 # Importar o pacote pandas para trabalhar com arquivos excel
+import os
+
 import pandas as pd
 
 # Abrir arquivo de script gerado pelo SAP
-arquivo = open('AS01.vbs', 'a')  # modo 'a' de append, insere novos dados no arquivo sem excluir os que estavam
+arquivo = open('AS01.vbs', 'w')  # modo 'a' de append, insere novos dados no arquivo sem excluir os que estavam
 
 # Abrir arquivo com os dados a serem lançados
 dados = pd.read_excel('AS01.xlsx', dtype=str)
+dados.fillna('', inplace=True)
 
 
+arquivo.write(f'''
+If Not IsObject(application) Then
+   Set SapGuiAuto  = GetObject("SAPGUI")
+   Set application = SapGuiAuto.GetScriptingEngine
+End If
+If Not IsObject(connection) Then
+   Set connection = application.Children(0)
+End If
+If Not IsObject(session) Then
+   Set session    = connection.Children(0)
+End If
+If IsObject(WScript) Then
+   WScript.ConnectObject session,     "on"
+   WScript.ConnectObject application, "on"
+End If
+''')
 
 # iterar sobre as linhas do arquivo excel e buscar os dados necessários para o script
 for index, row in dados.iterrows():
@@ -68,3 +87,5 @@ session.findById("wnd[0]/tbar[0]/btn[3]").press
 
 # Fechar o arquivo de script
 arquivo.close()
+
+os.startfile('AS01.vbs')
