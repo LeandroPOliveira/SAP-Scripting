@@ -1,0 +1,78 @@
+<ContentNavigationDrawer>:
+    ScrollView:
+
+        MDList:
+
+            OneLineListItem:
+                text: 'Tela Principal'
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "principal"
+
+            OneLineListItem:
+                text: "FB08"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "fb08"
+
+
+
+Screen:
+    name: 'tela1'
+
+    MDTopAppBar:
+        id: toolbar
+        pos_hint: {"top": 1}
+        elevation: 10
+        title: "Notas Fiscais de Serviço"
+        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+
+    MDNavigationLayout:
+        x: toolbar.height
+
+        ScreenManager:
+            id: screen_manager
+
+            Principal:
+                name: "principal"
+
+            TcodeFB08:
+                name: "fb08"
+
+
+        MDNavigationDrawer:
+            id: nav_drawer
+
+            ContentNavigationDrawer:
+                screen_manager: screen_manager
+                nav_drawer: nav_drawer
+
+
+<Principal>:
+    MDLabel:
+        size_hint: .20, .10
+        pos_hint: {'x': .075, 'y': .75}
+        font_size:24
+        text: 'teste'
+
+<TcodeFB08>:
+    FloatLayout:
+        size_hint: (1, 1)
+
+        MDRectangleFlatButton:
+            size_hint: .20, .10
+            pos_hint: {'x': .075, 'y': .75}
+            font_size:24
+            text_color: 1,1,1,1
+            line_color: 1, 1, 1, 1
+            md_bg_color: (36/255,100/255,203/255,1)
+            text: 'FB08'
+            on_press:
+                root.tcode_fb08()
+
+        MDTextField:
+            id: dir_pasta
+            size_hint: .30, .10
+            pos_hint: {'x': .1, 'y': .55}
+            hint_text: "Data Análise"
+
