@@ -5,6 +5,8 @@ import win32com.client
 import subprocess
 import sys
 import time
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from kivy.properties import StringProperty
 from kivymd.app import MDApp
 from kivymd.uix.button import MDFlatButton, MDRaisedButton
@@ -15,6 +17,7 @@ from kivy.metrics import dp
 from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
 from kivymd.uix.dialog import MDDialog
+import pandas as pd
 
 
 class ContentNavigationDrawer(Screen):
@@ -24,6 +27,8 @@ class ContentNavigationDrawer(Screen):
 class Principal(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.data_fim = None
+        self.data_ini = None
         self.session = None
 
         try:
@@ -53,54 +58,74 @@ class Principal(Screen):
             self.session.findById("wnd[0]/usr/txtRSYST-LANGU").text = "PT"
             self.session.findById("wnd[0]").sendVKey(0)
 
+    def periodo(self):
+        self.data_ini = self.ids.dt_ini.text.replace('/', '.')
+        self.data_fim = self.ids.dt_fim.text.replace('/', '.')
+        self.data_formatada = datetime.strptime(self.ids.dt_ini.text, '%d/%m/%Y')
+
+        return self.data_ini, self.data_fim, self.data_formatada
+
 
 class TcodeFB08(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.mes = '08'
-
+        self.session = None
 
     def tcode_fb08(self):
-
-        self.arquivo = f'FB08-{self.mes}.xlsx'
-
+        self.session = self.manager.get_screen('principal').session
+        self.data = self.manager.get_screen('principal').periodo()
+        self.arquivo = f'FB08 {self.data[2].month}-{self.data[2].year}.xlsx'
+        print(self.arquivo)
         self.session.findById("wnd[0]").maximize()
         self.session.findById("wnd[0]/tbar[0]/okcd").text = "fbl3n"
         self.session.findById("wnd[0]").sendVKey(0)
         self.session.findById("wnd[0]/usr/radX_AISEL").select()
         self.session.findById("wnd[0]/usr/ctxtSD_SAKNR-LOW").text = "1120170000"
-        self.session.findById("wnd[0]/usr/ctxtSO_BUDAT-LOW").text = "01.11.2022"
-        self.session.findById("wnd[0]/usr/ctxtSO_BUDAT-HIGH").text = "30.11.2022"
-        self.session.findById("wnd[0]/usr/ctxtSO_BUDAT-HIGH").setFocus()
-        self.session.findById("wnd[0]/usr/ctxtSO_BUDAT-HIGH").caretPosition = 10
-        self.session.findById("wnd[0]").sendVKey(8)
-        self.session.findById("wnd[0]/usr/lbl[48,5]").setFocus()
-        self.session.findById("wnd[0]/usr/lbl[48,5]").caretPosition = 7
-        self.session.findById("wnd[0]").sendVKey(2)
-        self.session.findById("wnd[0]/tbar[1]/btn[32]").press()
-        self.session.findById(
-            "wnd[1]/usr/tabsTS_LINES/tabpLI01/ssubSUB810:SAPLSKBH:0810/tblSAPLSKBHTC_WRITE_LIST/txtGT_WRITE_LIST-OUTPUTLEN[2,4]").text = "15"
-        self.session.findById(
-            "wnd[1]/usr/tabsTS_LINES/tabpLI01/ssubSUB810:SAPLSKBH:0810/tblSAPLSKBHTC_WRITE_LIST/txtGT_WRITE_LIST-OUTPUTLEN[2,4]").setFocus()
-        self.session.findById(
-            "wnd[1]/usr/tabsTS_LINES/tabpLI01/ssubSUB810:SAPLSKBH:0810/tblSAPLSKBHTC_WRITE_LIST/txtGT_WRITE_LIST-OUTPUTLEN[2,4]").caretPosition = 2
-        self.session.findById("wnd[1]").sendVKey(0)
-        self.session.findById("wnd[0]/usr").verticalScrollbar.position = 46
-        self.session.findById("wnd[0]/usr/lbl[48,5]").caretPosition = 8
-        self.session.findById("wnd[0]").sendVKey(2)
-        self.session.findById("wnd[0]/usr").verticalScrollbar.position = 0
+        self.session.findById("wnd[0]/usr/ctxtSO_BUDAT-LOW").text = self.data[0]
+        self.session.findById("wnd[0]/usr/ctxtSO_BUDAT-HIGH").text = self.data[1]
+        self.session.findById("wnd[0]/usr/ctxtPA_VARI").text = "/DESPESA SEG"
+        self.session.findById("wnd[0]/usr/ctxtPA_VARI").setFocus()
+        self.session.findById("wnd[0]/usr/ctxtPA_VARI").caretPosition = 12
+        self.session.findById("wnd[0]/tbar[1]/btn[8]").press()
         self.session.findById("wnd[0]/mbar/menu[0]/menu[3]/menu[1]").select()
         self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
         self.session.findById("wnd[1]/usr/ctxtDY_PATH").text = os.getcwd()
         self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = self.arquivo
-        self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = 7
+        self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = 5
         self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
-        self.session.findById("wnd[0]/usr/lbl[48,26]").setFocus()
-        self.session.findById("wnd[0]/usr/lbl[48,26]").caretPosition = 13
         self.session.findById("wnd[0]").sendVKey(3)
         self.session.findById("wnd[0]").sendVKey(3)
 
         self.ids.dir_pasta.text = os.path.join(os.getcwd(), self.arquivo)
+        print(self.ids.dir_pasta.text)
+
+    def estornar(self):
+        self.session = self.manager.get_screen('principal').session
+        dados = pd.read_excel(self.ids.dir_pasta.text, sheet_name=0, dtype=str)
+        dados = dados[dados['Tipo de documento'] == 'SA']
+        dados = dados[dados['Nº documento'].notnull()]
+        for documento in dados['Nº documento'].unique():
+            print(documento)
+            self.session.findById("wnd[0]").maximize()
+            self.session.findById("wnd[0]/tbar[0]/okcd").text = "fb08"
+            self.session.findById("wnd[0]").sendVKey(0)
+            self.session.findById("wnd[0]/usr/txtRF05A-BELNS").text = documento
+            self.session.findById("wnd[0]/usr/ctxtUF05A-STGRD").text = "02"
+            self.session.findById("wnd[0]/usr/ctxtBSIS-BUDAT").text = f"01.{self.data[2].month}.{self.data[2].year}"
+            self.session.findById("wnd[0]/usr/txtBSIS-MONAT").text = self.data[2].month
+            self.session.findById("wnd[0]/usr/ctxtRF05A-VOIDR").setFocus()
+            self.session.findById("wnd[0]/usr/ctxtRF05A-VOIDR").caretPosition = 0
+            self.session.findById("wnd[0]").sendVKey(11)
+            self.session.findById("wnd[0]").sendVKey(0)
+            self.session.findById("wnd[0]").sendVKey(0)
+            self.session.findById("wnd[0]").sendVKey(0)
+            self.session.findById("wnd[0]").sendVKey(0)
+            self.session.findById("wnd[0]").sendVKey(0)
+            self.session.findById("wnd[0]").sendVKey(0)
+            self.session.findById("wnd[0]").sendVKey(0)
+            self.session.findById("wnd[0]").sendVKey(0)
+            self.session.findById("wnd[0]").sendVKey(3)
+            self.session.findById("wnd[1]/usr/btnSPOP-OPTION1").press()
 
 
 class WindowManager(ScreenManager):

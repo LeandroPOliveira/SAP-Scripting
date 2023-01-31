@@ -49,11 +49,33 @@ Screen:
 
 
 <Principal>:
-    MDLabel:
-        size_hint: .20, .10
-        pos_hint: {'x': .075, 'y': .75}
-        font_size:24
-        text: 'teste'
+    FloatLayout:
+        size_hint: (1, 1)
+
+        MDLabel:
+            size_hint: .30, .10
+            pos_hint: {'x': .35, 'y': .65}
+            hint_text: "Data inicial"
+            halign: "center"
+            text: 'Selecione o período dos relatórios'
+
+        MDTextField:
+            mode: "rectangle"
+            id: dt_ini
+            size_hint: .15, .10
+            pos_hint: {'x': .3, 'y': .55}
+            hint_text: "Data inicial"
+            write_tab: False
+            text: '01/12/2022'
+
+        MDTextField:
+            mode: "rectangle"
+            id: dt_fim
+            size_hint: .15, .10
+            pos_hint: {'x': .6, 'y': .55}
+            hint_text: "Data Final"
+            write_tab: False
+            text: '31/12/2022'
 
 <TcodeFB08>:
     FloatLayout:
@@ -66,7 +88,7 @@ Screen:
             text_color: 1,1,1,1
             line_color: 1, 1, 1, 1
             md_bg_color: (36/255,100/255,203/255,1)
-            text: 'FB08'
+            text: 'Extrair razão'
             on_press:
                 root.tcode_fb08()
 
@@ -74,5 +96,16 @@ Screen:
             id: dir_pasta
             size_hint: .30, .10
             pos_hint: {'x': .1, 'y': .55}
-            hint_text: "Data Análise"
+            hint_text: "Diretório"
+            text: r'C:\Users\loliveira\PycharmProjects\Scripting\SAP-Scripting\FB08 12-2022.xlsx'
 
+        MDRectangleFlatButton:
+            size_hint: .20, .10
+            pos_hint: {'x': .075, 'y': .45}
+            font_size:24
+            text_color: 1,1,1,1
+            line_color: 1, 1, 1, 1
+            md_bg_color: (36/255,100/255,203/255,1)
+            text: 'Lançar estorno'
+            on_press:
+                root.estornar()
