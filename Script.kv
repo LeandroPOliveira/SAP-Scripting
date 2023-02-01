@@ -15,7 +15,11 @@
                     root.nav_drawer.set_state("close")
                     root.screen_manager.current = "fb08"
 
-
+            OneLineListItem:
+                text: "FBL3N"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "fbl3n"
 
 Screen:
     name: 'tela1'
@@ -38,6 +42,9 @@ Screen:
 
             TcodeFB08:
                 name: "fb08"
+
+            TcodeFBL3N:
+                name: "fbl3n"
 
 
         MDNavigationDrawer:
@@ -83,7 +90,7 @@ Screen:
 
         MDRectangleFlatButton:
             size_hint: .20, .10
-            pos_hint: {'x': .075, 'y': .75}
+            pos_hint: {'x': .4, 'y': .65}
             font_size:24
             text_color: 1,1,1,1
             line_color: 1, 1, 1, 1
@@ -94,14 +101,14 @@ Screen:
 
         MDTextField:
             id: dir_pasta
-            size_hint: .30, .10
-            pos_hint: {'x': .1, 'y': .55}
+            size_hint: .40, .10
+            pos_hint: {'x': .3, 'y': .5}
             hint_text: "Diretório"
             text: r'C:\Users\loliveira\PycharmProjects\Scripting\SAP-Scripting\FB08 12-2022.xlsx'
 
         MDRectangleFlatButton:
             size_hint: .20, .10
-            pos_hint: {'x': .075, 'y': .45}
+            pos_hint: {'x': .4, 'y': .35}
             font_size:24
             text_color: 1,1,1,1
             line_color: 1, 1, 1, 1
@@ -109,3 +116,43 @@ Screen:
             text: 'Lançar estorno'
             on_press:
                 root.estornar()
+
+<TcodeFBL3N>:
+    FloatLayout:
+        size_hint: (1, 1)
+
+        MDRectangleFlatButton:
+            size_hint: .20, .10
+            pos_hint: {'x': .4, 'y': .65}
+            font_size:24
+            text_color: 1,1,1,1
+            line_color: 1, 1, 1, 1
+            md_bg_color: (36/255,100/255,203/255,1)
+            text: 'Rateio energia'
+            on_press:
+                root.tcode_fbl3n()
+
+        MDTextField:
+            id: dir_pasta
+            size_hint: .40, .10
+            pos_hint: {'x': .3, 'y': .5}
+            hint_text: "Diretório"
+            text: r'C:\Users\loliveira\PycharmProjects\Scripting\SAP-Scripting\Energia 12-2022.xlsx'
+
+        MDTextField:
+            id: dir_energia
+            size_hint: .40, .10
+            pos_hint: {'x': .3, 'y': .3}
+            hint_text: "Diretório"
+            text: r'C:\Users\loliveira\PycharmProjects\Scripting\SAP-Scripting\Energia 12-2022.xlsx'
+
+        MDRectangleFlatButton:
+            size_hint: .20, .10
+            pos_hint: {'x': .4, 'y': .25}
+            font_size:24
+            text_color: 1,1,1,1
+            line_color: 1, 1, 1, 1
+            md_bg_color: (36/255,100/255,203/255,1)
+            text: 'Executar rateio'
+            on_press:
+                root.rateio_energia()

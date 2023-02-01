@@ -18,6 +18,7 @@ from kivy.core.window import Window
 from kivy.utils import get_color_from_hex
 from kivymd.uix.dialog import MDDialog
 import pandas as pd
+from tika import parser
 
 
 class ContentNavigationDrawer(Screen):
@@ -126,6 +127,97 @@ class TcodeFB08(Screen):
             self.session.findById("wnd[0]").sendVKey(0)
             self.session.findById("wnd[0]").sendVKey(3)
             self.session.findById("wnd[1]/usr/btnSPOP-OPTION1").press()
+
+
+class TcodeFBL3N(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.arquivo_energia = os.path.join(os.getcwd(), f'Energia {self.data[2].month}-{self.data[2].year}.xlsx')
+
+    def tcode_fbl3n(self):
+        self.session = self.manager.get_screen('principal').session
+        self.data = self.manager.get_screen('principal').periodo()
+        self.arquivo_energia = f'Energia {self.data[2].month}-{self.data[2].year}.xlsx'
+        print(self.arquivo)
+        self.session.findById("wnd[0]").maximize()
+        self.session.findById("wnd[0]/tbar[0]/okcd").text = "fbl3n"
+        self.session.findById("wnd[0]").sendVKey(0)
+        self.session.findById("wnd[0]/usr/radX_AISEL").select()
+        self.session.findById("wnd[0]/usr/btn%_SD_SAKNR_%_APP_%-VALU_PUSH").press()
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-"
+            "SLOW_I[1,0]").text = "6160322020"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-"
+            "SLOW_I[1,1]").text = "6160122020"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-"
+            "SLOW_I[1,2]").text = "6151122020"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-"
+            "SLOW_I[1,2]").setFocus()
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-"
+            "SLOW_I[1,2]").caretPosition = 0
+        self.session.findById("wnd[1]/tbar[0]/btn[8]").press()
+        self.session.findById("wnd[0]/usr/radX_AISEL").select()
+        self.session.findById("wnd[0]/usr/ctxtSO_BUDAT-LOW").text = self.data[0]
+        self.session.findById("wnd[0]/usr/ctxtSO_BUDAT-HIGH").text = self.data[1]
+        self.session.findById("wnd[0]/usr/ctxtPA_VARI").text = "/DESPESA SEG"
+        self.session.findById("wnd[0]/usr/ctxtPA_VARI").setFocus()
+        self.session.findById("wnd[0]/usr/ctxtPA_VARI").caretPosition = 12
+        self.session.findById("wnd[0]/tbar[1]/btn[8]").press()
+        self.session.findById("wnd[0]/mbar/menu[0]/menu[3]/menu[1]").select()
+        self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
+        self.session.findById("wnd[1]/usr/ctxtDY_PATH").text = os.getcwd()
+        self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = self.arquivo
+        self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = 5
+        self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
+        self.session.findById("wnd[0]").sendVKey(3)
+        self.session.findById("wnd[0]").sendVKey(3)
+
+    def rateio_energia(self):
+        razao = pd.read_excel(self.arquivo_energia, sheet_name=0)
+        razao['Nota'] = razao['Texto'].str.slice(10, 19)
+
+        dados = [[], [], [], []]
+        meses = {1: '01 - JANEIRO', 2: '02 - FEVEREIRO', 3: '03 - MARÇO', 4: '04 - ABRIL', 5: '05 - MAIO',
+                 6: '06 - JUNHO', 7: '07 - JULHO', 8: '08 - AGOSTO', 9: '09 - SETEMBRO', 10: '10 - OUTUBRO',
+                 11: '11 - NOVEMBRO', 12: '12 - DEZEMBRO'}
+
+        dir_energia = f'G:\GECOT\\NOTAS FISCAIS DIGITALIZADAS\\{self.data[2].year}\\{meses[self.data[2].month]}\ENERGIA ELÉTRICA'
+        for nota in os.listdir(dir_energia):
+
+            if nota.endswith('.pdf'):
+                conta = parser.from_file(os.path.join(dir_energia, nota))
+                linha_conta = conta['content'].splitlines()
+                outros_deb = 0
+                for index, row in enumerate(linha_conta):
+                    if 'Série C' in row:
+                        dados[3].append(linha_conta[index].split(' ')[1]) if linha_conta[index].split(' ')[1] \
+                                                                             not in dados[3] else None
+                    if 'CNPJ' in row:
+                        dados[0].append(linha_conta[index - 4])
+                        dados[1].append(linha_conta[index - 2][10:].split('-')[0].strip())
+                    if 'DÉBITOS' in row:
+                        outros_deb = float(linha_conta[index + 2].split(' ')[6].replace(',', '.'))
+                    if 'Total a Pagar (R$)' in row:
+                        vr_total = linha_conta[index + 1].strip().replace('.', '')
+                        try:
+                            vr_total = float(vr_total.replace(',', '.'))
+                        except ValueError:
+                            vr_total = 0.00
+                        imposto = (vr_total - outros_deb) * 0.0925
+                        vr_a_pagar = vr_total - imposto
+                        dados[2].append(round(vr_a_pagar, 2))
+
+        dados = pd.DataFrame(dados).T
+        dados.columns = ['Endereco', 'Cidade', 'Valor', 'Nota']
+
+        dados_a_completar = pd.merge(razao, dados[['Nota', 'Endereco', 'Cidade']], on=['Nota'], how='left')
+
+        # dados.to_excel('energia.xlsx', index=False)
+        dados_a_completar.to_excel('energia.xlsx')
 
 
 class WindowManager(ScreenManager):
