@@ -34,9 +34,11 @@ session.findById("wnd[0]").maximize
 session.findById("wnd[0]/tbar[0]/okcd").text = "fb08"
 session.findById("wnd[0]").sendVKey 0
 session.findById("wnd[0]/usr/txtRF05A-BELNS").text = "{row['Data']}"
+session.findById("wnd[0]/usr/ctxtBKPF-BUKRS").text = "GBD1"
+session.findById("wnd[0]/usr/txtRF05A-GJAHS").text = "2022"
 session.findById("wnd[0]/usr/ctxtUF05A-STGRD").text = "02"
-session.findById("wnd[0]/usr/ctxtBSIS-BUDAT").text = "01.12.2022"
-session.findById("wnd[0]/usr/txtBSIS-MONAT").text = "12"
+session.findById("wnd[0]/usr/ctxtBSIS-BUDAT").text = "01.01.2023"
+session.findById("wnd[0]/usr/txtBSIS-MONAT").text = "01"
 session.findById("wnd[0]/usr/ctxtRF05A-VOIDR").setFocus
 session.findById("wnd[0]/usr/ctxtRF05A-VOIDR").caretPosition = 0
 session.findById("wnd[0]").sendVKey 11

@@ -54,8 +54,8 @@ class Principal(Screen):
             self.session = self.connection.Children(0)
 
             self.session.findById("wnd[0]/usr/txtRSYST-MANDT").text = "200"
-            self.session.findById("wnd[0]/usr/txtRSYST-BNAME").text = "loliveira"
-            self.session.findById("wnd[0]/usr/pwdRSYST-BCODE").text = "lpo;5159"
+            self.session.findById("wnd[0]/usr/txtRSYST-BNAME").text = os.environ['usuario']
+            self.session.findById("wnd[0]/usr/pwdRSYST-BCODE").text = os.environ['senha']
             self.session.findById("wnd[0]/usr/txtRSYST-LANGU").text = "PT"
             self.session.findById("wnd[0]").sendVKey(0)
 
@@ -71,13 +71,15 @@ class TcodeFB08(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.session = None
+        # self.data = self.manager.get_screen('principal').periodo()
 
     def tcode_fb08(self):
         self.session = self.manager.get_screen('principal').session
-        self.data = self.manager.get_screen('principal').periodo()
+        # self.data = self.manager.get_screen('principal').periodo()
         self.arquivo = f'FB08 {self.data[2].month}-{self.data[2].year}.xlsx'
         print(self.arquivo)
         self.session.findById("wnd[0]").maximize()
+        self.session.createSession()
         self.session.findById("wnd[0]/tbar[0]/okcd").text = "fbl3n"
         self.session.findById("wnd[0]").sendVKey(0)
         self.session.findById("wnd[0]/usr/radX_AISEL").select()
@@ -111,6 +113,8 @@ class TcodeFB08(Screen):
             self.session.findById("wnd[0]/tbar[0]/okcd").text = "fb08"
             self.session.findById("wnd[0]").sendVKey(0)
             self.session.findById("wnd[0]/usr/txtRF05A-BELNS").text = documento
+            self.session.findById("wnd[0]/usr/ctxtBKPF-BUKRS").text = "GBD1"
+            self.session.findById("wnd[0]/usr/txtRF05A-GJAHS").text = "2022"
             self.session.findById("wnd[0]/usr/ctxtUF05A-STGRD").text = "02"
             self.session.findById("wnd[0]/usr/ctxtBSIS-BUDAT").text = f"01.{self.data[2].month}.{self.data[2].year}"
             self.session.findById("wnd[0]/usr/txtBSIS-MONAT").text = self.data[2].month
@@ -132,17 +136,18 @@ class TcodeFB08(Screen):
 class TcodeFBL3N(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.arquivo_energia = os.path.join(os.getcwd(), f'Energia {self.data[2].month}-{self.data[2].year}.xlsx')
+        # self.arquivo_energia = os.path.join(os.getcwd(), f'Energia {self.data[2].month}-{self.data[2].year}.xlsx')
 
     def tcode_fbl3n(self):
         self.session = self.manager.get_screen('principal').session
         self.data = self.manager.get_screen('principal').periodo()
         self.arquivo_energia = f'Energia {self.data[2].month}-{self.data[2].year}.xlsx'
-        print(self.arquivo)
+
         self.session.findById("wnd[0]").maximize()
+        self.session.createSession()
         self.session.findById("wnd[0]/tbar[0]/okcd").text = "fbl3n"
         self.session.findById("wnd[0]").sendVKey(0)
-        self.session.findById("wnd[0]/usr/radX_AISEL").select()
+        # self.session.findById("wnd[0]/usr/radX_AISEL").select()
         self.session.findById("wnd[0]/usr/btn%_SD_SAKNR_%_APP_%-VALU_PUSH").press()
         self.session.findById(
             "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-"
@@ -170,7 +175,7 @@ class TcodeFBL3N(Screen):
         self.session.findById("wnd[0]/mbar/menu[0]/menu[3]/menu[1]").select()
         self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
         self.session.findById("wnd[1]/usr/ctxtDY_PATH").text = os.getcwd()
-        self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = self.arquivo
+        self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = self.arquivo_energia
         self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = 5
         self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
         self.session.findById("wnd[0]").sendVKey(3)
