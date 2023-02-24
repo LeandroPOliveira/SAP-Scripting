@@ -75,7 +75,7 @@ class TcodeFB08(Screen):
 
     def tcode_fb08(self):
         self.session = self.manager.get_screen('principal').session
-        # self.data = self.manager.get_screen('principal').periodo()
+        self.data = self.manager.get_screen('principal').periodo()
         self.arquivo = f'FB08 {self.data[2].month}-{self.data[2].year}.xlsx'
         print(self.arquivo)
         self.session.findById("wnd[0]").maximize()
@@ -223,6 +223,66 @@ class TcodeFBL3N(Screen):
 
         # dados.to_excel('energia.xlsx', index=False)
         dados_a_completar.to_excel('energia.xlsx')
+
+
+class ExtrairSAP(Screen):
+    def extrair(self):
+        self.session = self.manager.get_screen('principal').session
+        self.data = self.manager.get_screen('principal').periodo()
+        self.arquivo_pis = f'PIS {self.data[2].month}-{self.data[2].year}.xlsx'
+
+        self.session.createSession()
+        self.session.findById("wnd[0]").maximize()
+        self.session.findById("wnd[0]/tbar[0]/okcd").text = "fbl3n"
+        self.session.findById("wnd[0]").sendVKey(0)
+        # self.session.findById("wnd[0]/usr/radX_AISEL").select()
+        self.session.findById("wnd[0]/usr/btn%_SD_SAKNR_%_APP_%-VALU_PUSH").press()
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,0]").text = "6120102001"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,1]").text = "6122102001"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,2]").text = "6123102001"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,3]").text = "6124102001"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,4]").text = "6126102001"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,5]").text = "6127302001"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,6]").text = "6121012001"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-SLOW_I[1,7]").text = "6121112001"
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-"
+            "SLOW_I[1,2]").setFocus()
+        self.session.findById(
+            "wnd[1]/usr/tabsTAB_STRIP/tabpSIVA/ssubSCREEN_HEADER:SAPLALDB:3010/tblSAPLALDBSINGLE/ctxtRSCSEL_255-"
+            "SLOW_I[1,2]").caretPosition = 0
+        self.session.findById("wnd[1]/tbar[0]/btn[8]").press()
+        self.session.findById("wnd[0]/usr/radX_AISEL").select()
+        self.session.findById("wnd[0]/usr/ctxtSO_BUDAT-LOW").text = self.data[0]
+        self.session.findById("wnd[0]/usr/ctxtSO_BUDAT-HIGH").text = self.data[1]
+        self.session.findById("wnd[0]/usr/ctxtPA_VARI").text = "Z/ESTORNO"
+        self.session.findById("wnd[0]/usr/ctxtPA_VARI").setFocus()
+        self.session.findById("wnd[0]/usr/ctxtPA_VARI").caretPosition = 12
+        self.session.findById("wnd[0]/tbar[1]/btn[8]").press()
+        self.session.findById("wnd[0]/usr/lbl[20,5]").setFocus()
+        self.session.findById("wnd[0]/usr/lbl[20,5]").caretPosition = 4
+        self.session.findById("wnd[0]").sendVKey(2)
+        self.session.findById("wnd[0]/tbar[1]/btn[41]").press()
+        self.session.findById("wnd[0]/usr/lbl[9,5]").setFocus()
+        self.session.findById("wnd[0]/usr/lbl[9,5]").caretPosition = 6
+        self.session.findById("wnd[0]").sendVKey(2)
+        self.session.findById("wnd[0]/tbar[1]/btn[41]").press()
+        self.session.findById("wnd[0]/mbar/menu[0]/menu[3]/menu[1]").select()
+        self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
+        self.session.findById("wnd[1]/usr/ctxtDY_PATH").text = os.getcwd()
+        self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = self.arquivo_pis
+        self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").caretPosition = 5
+        self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
+        self.session.findById("wnd[0]").sendVKey(3)
+        self.session.findById("wnd[0]").sendVKey(3)
 
 
 class WindowManager(ScreenManager):

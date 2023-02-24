@@ -10,16 +10,22 @@
                     root.screen_manager.current = "principal"
 
             OneLineListItem:
-                text: "FB08"
+                text: "Estorno receita"
                 on_press:
                     root.nav_drawer.set_state("close")
                     root.screen_manager.current = "fb08"
 
             OneLineListItem:
-                text: "FBL3N"
+                text: "Rateio energia"
                 on_press:
                     root.nav_drawer.set_state("close")
                     root.screen_manager.current = "fbl3n"
+
+            OneLineListItem:
+                text: "Extrair SAP"
+                on_press:
+                    root.nav_drawer.set_state("close")
+                    root.screen_manager.current = "extrair"
 
 Screen:
     name: 'tela1'
@@ -28,7 +34,7 @@ Screen:
         id: toolbar
         pos_hint: {"top": 1}
         elevation: 10
-        title: "Notas Fiscais de Serviço"
+        title: "Scripts SAP"
         left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
 
     MDNavigationLayout:
@@ -45,6 +51,9 @@ Screen:
 
             TcodeFBL3N:
                 name: "fbl3n"
+
+            ExtrairSAP:
+                name: 'extrair'
 
 
         MDNavigationDrawer:
@@ -156,3 +165,18 @@ Screen:
             text: 'Executar rateio'
             on_press:
                 root.rateio_energia()
+
+<ExtrairSAP>:
+    FloatLayout:
+        size_hint: (1, 1)
+
+        MDRectangleFlatButton:
+            size_hint: .20, .10
+            pos_hint: {'x': .4, 'y': .65}
+            font_size:24
+            text_color: 1,1,1,1
+            line_color: 1, 1, 1, 1
+            md_bg_color: (36/255,100/255,203/255,1)
+            text: 'Extrair PIS'
+            on_press:
+                root.extrair()
