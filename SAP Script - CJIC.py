@@ -35,7 +35,7 @@ End If
 session.findById("wnd[0]").maximize
 session.findById("wnd[0]/tbar[0]/okcd").text = "cjic"
 session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]/usr/ctxtCN_PSPNR-LOW").text = "RSG.22.001.022.1.06.2"
+session.findById("wnd[0]/usr/ctxtCN_PSPNR-LOW").text = "RSG.23.001.023.1.06.2"
 session.findById("wnd[0]/usr/ctxtP_DISVAR").text = "/IMOB_OBJETO"
 session.findById("wnd[0]/usr/ctxtP_DISVAR").setFocus
 session.findById("wnd[0]/usr/ctxtP_DISVAR").caretPosition = 12

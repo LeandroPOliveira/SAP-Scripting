@@ -19,6 +19,7 @@ from kivy.utils import get_color_from_hex
 from kivymd.uix.dialog import MDDialog
 import pandas as pd
 from tika import parser
+from dateutil import relativedelta
 
 
 class ContentNavigationDrawer(Screen):
@@ -103,21 +104,22 @@ class TcodeFB08(Screen):
         print(self.ids.dir_pasta.text)
 
     def estornar(self):
+        self.data = self.manager.get_screen('principal').periodo()
         self.session = self.manager.get_screen('principal').session
         dados = pd.read_excel(self.ids.dir_pasta.text, sheet_name=0, dtype=str)
         dados = dados[dados['Tipo de documento'] == 'SA']
         dados = dados[dados['Nº documento'].notnull()]
         for documento in dados['Nº documento'].unique():
-            print(documento)
+            mes_seguinte = str((self.data[2] + relativedelta.relativedelta(months=1)).month).zfill(2)
             self.session.findById("wnd[0]").maximize()
             self.session.findById("wnd[0]/tbar[0]/okcd").text = "fb08"
             self.session.findById("wnd[0]").sendVKey(0)
             self.session.findById("wnd[0]/usr/txtRF05A-BELNS").text = documento
             self.session.findById("wnd[0]/usr/ctxtBKPF-BUKRS").text = "GBD1"
-            self.session.findById("wnd[0]/usr/txtRF05A-GJAHS").text = "2022"
+            self.session.findById("wnd[0]/usr/txtRF05A-GJAHS").text = f"{self.data[2].year}"
             self.session.findById("wnd[0]/usr/ctxtUF05A-STGRD").text = "02"
-            self.session.findById("wnd[0]/usr/ctxtBSIS-BUDAT").text = f"01.{self.data[2].month}.{self.data[2].year}"
-            self.session.findById("wnd[0]/usr/txtBSIS-MONAT").text = self.data[2].month
+            self.session.findById("wnd[0]/usr/ctxtBSIS-BUDAT").text = f"01.{mes_seguinte}.{self.data[2].year}"
+            self.session.findById("wnd[0]/usr/txtBSIS-MONAT").text = mes_seguinte
             self.session.findById("wnd[0]/usr/ctxtRF05A-VOIDR").setFocus()
             self.session.findById("wnd[0]/usr/ctxtRF05A-VOIDR").caretPosition = 0
             self.session.findById("wnd[0]").sendVKey(11)
