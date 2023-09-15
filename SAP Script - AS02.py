@@ -31,18 +31,18 @@ for index, row in dados.iterrows():
 session.findById("wnd[0]").maximize
 session.findById("wnd[0]/tbar[0]/okcd").text = "as02"
 session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]/usr/ctxtANLA-ANLN1").text = "{row['Imob']}"
-session.findById("wnd[0]/usr/ctxtANLA-ANLN2").text = "{row['Sub']}"
+session.findById("wnd[0]/usr/ctxtANLA-ANLN1").text = "{row['imob']}"
+session.findById("wnd[0]/usr/ctxtANLA-ANLN2").text = "{row['sub']}"
 session.findById("wnd[0]/usr/ctxtANLA-ANLN2").setFocus
 session.findById("wnd[0]/usr/ctxtANLA-ANLN2").caretPosition = 1
 session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03").select
-session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAIST:1160/ctxtANLA-ORD41").text = "{row['cidade']}"
-session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAIST:1160/ctxtANLA-ORD42").text = "{row['sistema']}"
-session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAIST:1160/ctxtANLA-ORD42").setFocus
-session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAIST:1160/ctxtANLA-ORD42").caretPosition = 2
-session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]/tbar[0]/btn[11]").press
-session.findById("wnd[0]").sendVKey 3
+session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB01/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAIST:1140/txtANLA-TXT50").text = "{row['texto1']}"
+session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB01/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAIST:1140/txtANLA-TXA50").text = "{row['texto2']}"
+session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB01/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAIST:1140/txtANLH-ANLHTXT").text = "{row['texto3']}"
+session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB01/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAIST:1140/txtANLA-MENGE").text = "{str(row['quant']).replace('.',',')}"
+session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB01/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAIST:1140/txtANLA-MENGE").setFocus
+session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB01/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAIST:1140/txtANLA-MENGE").caretPosition = 5
+session.findById("wnd[0]").sendVKey 11
+session.findById("wnd[0]/tbar[0]/btn[3]").press
 
 ''')
