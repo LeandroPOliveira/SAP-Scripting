@@ -51,6 +51,13 @@ session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03
 session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03/ssubSUBSC:SAPLATAB:0201/subAREA1:SAPLAMDP:0401/txtRAIFP2-ANBTR").caretPosition = 8
 session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB02").select
 session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB01").select
+session.findById("wnd[0]/tbar[1]/btn[9]").press
+session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell/shellcont[1]/shell").setCurrentCell 2,"HKONT"
+session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell/shellcont[1]/shell").selectedRows = "2"
+session.findById("wnd[0]").sendVKey 14
+session.findById("wnd[1]/usr/ctxtCOBL-KOSTL").text = "11440"
+session.findById("wnd[1]/usr/ctxtCOBL-KOSTL").caretPosition = 5
+session.findById("wnd[1]/tbar[0]/btn[0]").press
 session.findById("wnd[0]/tbar[0]/btn[11]").press
 session.findById("wnd[0]/tbar[0]/btn[3]").press
 
@@ -58,6 +65,10 @@ session.findById("wnd[0]/tbar[0]/btn[3]").press
 
 # Fechar o arquivo de script
 arquivo.close()
+
+
+# session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03/ssubSUBSC:SAPLATAB:0201/subAREA1:SAPLAMDP:0401/radRAIFP2-XANEU").select
+# session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03/ssubSUBSC:SAPLATAB:0201/subAREA1:SAPLAMDP:0401/radRAIFP2-XANEU").setFocus
 
 # session.findById("wnd[0]/tbar[1]/btn[9]").press
 # session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell/shellcont[1]/shell").setCurrentCell 2,"HKONT"

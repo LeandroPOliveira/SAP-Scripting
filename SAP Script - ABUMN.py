@@ -49,7 +49,7 @@ session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB02
 session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB02/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAMDP:0507/subSUBSCREEN1:SAPLAMDP:0203/txtRAIFP2-MONAT").text = "{row['periodo']}"
 session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB02/ssubSUBSC:SAPLATAB:0200/subAREA1:SAPLAMDP:0507/subSUBSCREEN1:SAPLAMDP:0203/txtRAIFP2-MONAT").caretPosition = 1
 session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03").select
-session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03/ssubSUBSC:SAPLATAB:0201/subAREA1:SAPLAMDP:0401/txtRAIFP2-ANBTR").text = "{row['valor'].replace('.',',')}"
+session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03/ssubSUBSC:SAPLATAB:0201/subAREA1:SAPLAMDP:0401/txtRAIFP2-ANBTR").text = "{str(round(float(row['valor']),2)).replace('.',',')}"
 session.findById("wnd[0]/usr/subTABSTRIP:SAPLATAB:0100/tabsTABSTRIP100/tabpTAB03/ssubSUBSC:SAPLATAB:0201/subAREA1:SAPLAMDP:0401/txtRAIFP2-ANBTR").caretPosition = 11
 session.findById("wnd[0]/tbar[0]/btn[11]").press
 session.findById("wnd[0]/tbar[0]/btn[3]").press

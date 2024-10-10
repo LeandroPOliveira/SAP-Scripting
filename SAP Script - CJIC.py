@@ -33,13 +33,13 @@ If IsObject(WScript) Then
 End If
 
 session.findById("wnd[0]").maximize
-session.findById("wnd[0]/tbar[0]/okcd").text = "cjic"
+session.findById("wnd[0]/tbar[0]/okcd").text = "CJIC"
 session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]/usr/ctxtCN_PSPNR-LOW").text = "RSG.23.001.023.1.06.2"
+session.findById("wnd[0]/usr/ctxtCN_PSPNR-LOW").text = "RSG.24.001.024.1.05.2"
 session.findById("wnd[0]/usr/ctxtP_DISVAR").text = "/IMOB_OBJETO"
 session.findById("wnd[0]/usr/ctxtP_DISVAR").setFocus
 session.findById("wnd[0]/usr/ctxtP_DISVAR").caretPosition = 12
-session.findById("wnd[0]/tbar[1]/btn[8]").press
+session.findById("wnd[0]").sendVKey 8
 session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell/shellcont[1]/shell").setCurrentCell -1,"POBID"
 session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell/shellcont[1]/shell").selectColumn "POBID"
 session.findById("wnd[0]/tbar[1]/btn[29]").press
@@ -47,21 +47,21 @@ session.findById("wnd[1]/usr/ssub%_SUBSCREEN_FREESEL:SAPLSSEL:1105/btn%_%%DYN001
 session.findById("wnd[2]/tbar[0]/btn[24]").press
 session.findById("wnd[2]/tbar[0]/btn[8]").press
 session.findById("wnd[1]/tbar[0]/btn[0]").press
-session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell/shellcont[1]/shell").setCurrentCell -1,""
-session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell/shellcont[1]/shell").selectAll
+session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell/shellcont[1]/shell").currentCellColumn = ""
+session.findById("wnd[0]/usr/cntlGRID1/shellcont/shell/shellcont[1]/shell").selectedRows = "0"
 session.findById("wnd[0]/tbar[1]/btn[13]").press
 session.findById("wnd[0]/usr/tblSAPLKOBSTC_RULES/ctxtDKOBR-EMPGE[1,0]").text = "{v}"
-session.findById("wnd[0]/usr/tblSAPLKOBSTC_RULES/txtCOBRB-PROZS[3,0]").setFocus
-session.findById("wnd[0]/usr/tblSAPLKOBSTC_RULES/txtCOBRB-PROZS[3,0]").caretPosition = 0
+session.findById("wnd[0]/usr/tblSAPLKOBSTC_RULES/ctxtDKOBR-EMPGE[1,0]").setFocus
+session.findById("wnd[0]/usr/tblSAPLKOBSTC_RULES/ctxtDKOBR-EMPGE[1,0]").caretPosition = 0
 session.findById("wnd[0]").sendVKey 3
-session.findById("wnd[0]/tbar[0]/btn[11]").press
-session.findById("wnd[0]/tbar[0]/btn[3]").press
+session.findById("wnd[0]").sendVKey 11
+session.findById("wnd[0]").sendVKey 3
 session.findById("wnd[1]/usr/btnSPOP-OPTION1").press
-session.findById("wnd[0]/tbar[0]/btn[3]").press
+session.findById("wnd[0]").sendVKey 3
 ''')
 
     arquivo.close()
 
     os.startfile('CJIC.vbs')
-    sleep(5)
+    sleep(3)
 

@@ -31,16 +31,26 @@ for index, row in dados.iterrows():
 
 
 session.findById("wnd[0]").maximize
-session.findById("wnd[0]/tbar[0]/okcd").text = "fb02"
+session.findById("wnd[0]/tbar[0]/okcd").text = "FB03"
 session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]/usr/txtRF05L-BELNR").text = {row['Doc']}
+session.findById("wnd[0]/usr/txtRF05L-BELNR").text = "{row['doc']}"
+session.findById("wnd[0]/usr/ctxtRF05L-BUKRS").text = "{row['emp']}"
+session.findById("wnd[0]/usr/txtRF05L-GJAHR").text = "{row['exe']}"
+session.findById("wnd[0]/usr/txtRF05L-GJAHR").setFocus
+session.findById("wnd[0]/usr/txtRF05L-GJAHR").caretPosition = 4
 session.findById("wnd[0]").sendVKey 0
-session.findById("wnd[0]/usr/cntlCTRL_CONTAINERBSEG/shellcont/shell").currentCellColumn = "SGTXT"
-session.findById("wnd[0]/usr/cntlCTRL_CONTAINERBSEG/shellcont/shell").doubleClickCurrentCell
-session.findById("wnd[0]/usr/ctxtBSEG-SGTXT").text = "{row['Hist']}"
-session.findById("wnd[0]/usr/ctxtBSEG-SGTXT").setFocus
-session.findById("wnd[0]/usr/ctxtBSEG-SGTXT").caretPosition = 11
-session.findById("wnd[0]/tbar[0]/btn[11]").press
+session.findById("wnd[0]/usr/cntlCTRL_CONTAINERBSEG/shellcont/shell").pressToolbarContextButton "&MB_EXPORT"
+session.findById("wnd[0]/usr/cntlCTRL_CONTAINERBSEG/shellcont/shell").selectContextMenuItem "&XXL"
+session.findById("wnd[1]/tbar[0]/btn[0]").press
+session.findById("wnd[1]/usr/ctxtDY_PATH").setFocus
+session.findById("wnd[1]/usr/ctxtDY_PATH").caretPosition = 0
+session.findById("wnd[1]").sendVKey 4
+session.findById("wnd[2]/usr/ctxtDY_PATH").text = "C:\\Users\loliveira\Desktop\\testes\Ativo de contrato"
+session.findById("wnd[2]/usr/ctxtDY_FILENAME").text = "{row['for']} {row['num']}.XLSX"
+session.findById("wnd[2]/usr/ctxtDY_FILENAME").caretPosition = 5
+session.findById("wnd[2]/tbar[0]/btn[0]").press
+session.findById("wnd[1]/tbar[0]/btn[0]").press
+session.findById("wnd[0]").sendVKey 3
 session.findById("wnd[0]").sendVKey 3
     ''')
 

@@ -35,10 +35,10 @@ session.findById("wnd[0]/tbar[0]/okcd").text = "fb08"
 session.findById("wnd[0]").sendVKey 0
 session.findById("wnd[0]/usr/txtRF05A-BELNS").text = "{row['Data']}"
 session.findById("wnd[0]/usr/ctxtBKPF-BUKRS").text = "GBD2"
-session.findById("wnd[0]/usr/txtRF05A-GJAHS").text = "2023"
+session.findById("wnd[0]/usr/txtRF05A-GJAHS").text = "2024"
 session.findById("wnd[0]/usr/ctxtUF05A-STGRD").text = "02"
-session.findById("wnd[0]/usr/ctxtBSIS-BUDAT").text = "31.08.2023"
-session.findById("wnd[0]/usr/txtBSIS-MONAT").text = "08"
+session.findById("wnd[0]/usr/ctxtBSIS-BUDAT").text = "01.07.2024"
+session.findById("wnd[0]/usr/txtBSIS-MONAT").text = "7"
 session.findById("wnd[0]/usr/ctxtRF05A-VOIDR").setFocus
 session.findById("wnd[0]/usr/ctxtRF05A-VOIDR").caretPosition = 0
 session.findById("wnd[0]").sendVKey 11
